@@ -10,6 +10,28 @@ import AppKit
 
 let optionKeyCode: UInt16 = 58
 
+class CustomJSscript {
+
+    static func convert(url: String) -> String {
+        let jsFile = NSHomeDirectory() + "/.Helium.js"
+        guard
+            NSFileManager.defaultManager().fileExistsAtPath(jsFile),
+            let jsCode = try? String(contentsOfFile: jsFile),
+            let input = try? NSJSONSerialization.dataWithJSONObject([url], options: []),
+            let escapedInput = String(data: input, encoding: NSUTF8StringEncoding),
+            let context = JSContext()
+        else {
+            return url
+        }
+
+        context.evaluateScript(jsCode)
+        let result = context.evaluateScript("redirect(\(escapedInput)[0])")
+        return result.isString ? result.toString() : url
+
+    }
+
+}
+
 class HeliumPanelController : NSWindowController {
 
     private var webViewController: WebViewController {
@@ -300,7 +322,7 @@ class HeliumPanelController : NSWindowController {
             if response == NSAlertFirstButtonReturn {
                 // Load
                 let text = (alert.accessoryView as! NSTextField).stringValue
-                self.webViewController.loadAlmostURL(text)
+                self.webViewController.loadAlmostURL(CustomJSscript.convert(text))
             }
         })
         alert.accessoryView?.becomeFirstResponder()
