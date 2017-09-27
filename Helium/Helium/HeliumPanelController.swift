@@ -242,7 +242,6 @@ class HeliumPanelController : NSWindowController {
         urlField.usesSingleLineMode = true
         
         alert.accessoryView = urlField
-        alert.accessoryView.becomeFirstResponder()
         alert.addButtonWithTitle("Load")
         alert.addButtonWithTitle("Cancel")
         alert.beginSheetModalForWindow(self.window!, completionHandler: { response in
@@ -252,6 +251,7 @@ class HeliumPanelController : NSWindowController {
                 self.webViewController.loadAlmostURL(text)
             }
         })
+        alert.accessoryView?.becomeFirstResponder()
     }
     
     func didRequestChangeHomepage(){
