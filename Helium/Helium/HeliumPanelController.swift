@@ -60,7 +60,7 @@ class HeliumPanelController : NSWindowController {
         }
     }
     
-    private var titleBarAppereance: TitleBarAppearence = .AlwaysShow {
+    private var titleBarAppereance: TitleBarAppearence = .HoverShow {
         didSet {
             updateTitleBar()
         }
